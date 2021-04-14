@@ -12,6 +12,10 @@ public class Tetris extends PApplet {
         PApplet.runSketch(appArgs, Tetris);
     }
 
+    ////////////
+    // VARIABLES
+    ////////////
+
     int white = color(255, 255, 255);
     int red = color(184, 64, 64);
 
@@ -20,7 +24,11 @@ public class Tetris extends PApplet {
 
     Shape currentShape = new Shape();
     ArrayList<Shape> oldShapes = new ArrayList<>();
+    ArrayList<Block> TotalBlockedSpaces = new ArrayList<>();
 
+    ////////////
+    // METHODS
+    ////////////
 
     // Screen Size according to Block Size
     public void settings() {
@@ -41,16 +49,58 @@ public class Tetris extends PApplet {
             currentShape.refreshBlockedSpaces();
             drawSquare(currentShape.posX, currentShape.posY);
         }
-        if (currentShape.posY >= 14) {
+        VerticalCollisionCheck();
+    }
+
+    public void VerticalCollisionCheck() {
+        boolean otherTetronimoBelow = false;
+        for (Block tetronimo: currentShape.blockedSpaces) {
+            for (Block blocked: TotalBlockedSpaces) {
+                if (tetronimo.x == blocked.x && tetronimo.y == blocked.y - 1) {
+                    otherTetronimoBelow = true;
+                    break;
+                }
+            }
+        }
+        if (currentShape.posY >= 14 || otherTetronimoBelow) {
+            TotalBlockedSpaces.addAll(currentShape.blockedSpaces);// TODO use this line in the tetrisCheck() method
             oldShapes.add(currentShape);
             currentShape = new Shape();
+            tetrisCheck();
             drawSquare(currentShape.posX, currentShape.posY);
         }
     }
 
+
+    private void tetrisCheck() {
+        int tetrisCount= 0;
+        // TODO check if at ANY line (Y-Axis from bottom to top) there is a Tetris.
+        //  If yes, then remove that line and continue the check.
+        //  after all Tetris checks, make the blocks fall down by the number of
+        //  Tetrisses made (reduce Y number of old block in "oldShapes"
+        boolean isTetris = false;
+    }
+
     public void keyPressed() {
+        // down movement
+        if (key == 's') {
+            drawBackground();
+            VerticalCollisionCheck();
+            currentShape.posY += 1;
+            currentShape.refreshBlockedSpaces();
+            drawSquare(currentShape.posX, currentShape.posY);
+        }
         // left movement
-        if (key == 'a') {
+        boolean otherTetronimoLeft = false;
+        for (Block tetronimo: currentShape.blockedSpaces) {
+            for (Block blocked: TotalBlockedSpaces) {
+                if (tetronimo.x == blocked.x + 1 && tetronimo.y == blocked.y) {
+                    otherTetronimoLeft = true;
+                    break;
+                }
+            }
+        }
+        if (key == 'a' &&! otherTetronimoLeft) {
             drawBackground();
             if (currentShape.posX > 0) {
                 currentShape.posX -= 1;
@@ -59,19 +109,20 @@ public class Tetris extends PApplet {
             drawSquare(currentShape.posX, currentShape.posY);
         }
         // right movement
-        if (key == 'd') {
+        boolean otherTetronimoRight = false;
+        for (Block tetronimo: currentShape.blockedSpaces) {
+            for (Block blocked: TotalBlockedSpaces) {
+                if (tetronimo.x == blocked.x - 1 && tetronimo.y == blocked.y) {
+                    otherTetronimoRight = true;
+                    break;
+                }
+            }
+        }
+        if (key == 'd' &&! otherTetronimoRight) {
             drawBackground();
             if (currentShape.posX < 8) {
                 currentShape.posX += 1;
                 currentShape.refreshBlockedSpaces();
-            }
-            drawSquare(currentShape.posX, currentShape.posY);
-        }
-        // down movement
-        if (key == 's') {
-            drawBackground();
-            if (currentShape.posY < 14) {
-                currentShape.posY += 1;
             }
             drawSquare(currentShape.posX, currentShape.posY);
         }
