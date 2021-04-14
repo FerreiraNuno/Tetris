@@ -2,7 +2,10 @@ package Main;
 
 import processing.core.PApplet;
 
+import java.util.ArrayList;
+
 public class Tetris extends PApplet {
+
     public static void main(String[] args) {
         String[] appArgs = {"Tetris"};
         Tetris Tetris = new Tetris();
@@ -11,20 +14,15 @@ public class Tetris extends PApplet {
 
     int white = color(255, 255, 255);
     int red = color(184, 64, 64);
-    int green = color(64, 186, 64);
-    int blue = color(64, 64, 186);
-    int yellow = color(184, 184, 64);
-    int cyan = color(64, 184, 184);
-    int lila = color(184, 64, 184);
 
-    // block Size
-    int bs = 60;
+    // Block Size
+    public static int bs = 60;
 
-    int posX = 4;
-    int posY = 0;
+    Shape currentShape = new Shape();
+    ArrayList<Shape> oldShapes = new ArrayList<>();
 
 
-    // One Block == 50pixel
+    // Screen Size according to Block Size
     public void settings() {
         size(10 * bs, 16 * bs);
     }
@@ -32,39 +30,50 @@ public class Tetris extends PApplet {
     // setup before the game even starts
     public void setup() {
         drawBackground();
-        drawSquare(posX, posY);
+        drawSquare(currentShape.posX, currentShape.posY);
     }
 
     public void draw() {
-        if (millis() % 1000 < 15 && posY < 14) {
+        // push block down every second
+        if (millis() % 1000 < 15 && currentShape.posY < 30) {
             drawBackground();
-            posY += 1;
-            drawSquare(posX, posY);
+            currentShape.posY += 1;
+            currentShape.refreshBlockedSpaces();
+            drawSquare(currentShape.posX, currentShape.posY);
+        }
+        if (currentShape.posY >= 14) {
+            oldShapes.add(currentShape);
+            currentShape = new Shape();
+            drawSquare(currentShape.posX, currentShape.posY);
         }
     }
 
     public void keyPressed() {
+        // left movement
         if (key == 'a') {
             drawBackground();
-            if (posX > 0) {
-                posX -= 1;
+            if (currentShape.posX > 0) {
+                currentShape.posX -= 1;
+                currentShape.refreshBlockedSpaces();
             }
-            drawSquare(posX, posY);
+            drawSquare(currentShape.posX, currentShape.posY);
         }
-
+        // right movement
         if (key == 'd') {
             drawBackground();
-            if (posX < 8) {
-                posX += 1;
+            if (currentShape.posX < 8) {
+                currentShape.posX += 1;
+                currentShape.refreshBlockedSpaces();
             }
-            drawSquare(posX, posY);
+            drawSquare(currentShape.posX, currentShape.posY);
         }
+        // down movement
         if (key == 's') {
             drawBackground();
-            if (posY < 14) {
-                posY += 1;
+            if (currentShape.posY < 14) {
+                currentShape.posY += 1;
             }
-            drawSquare(posX, posY);
+            drawSquare(currentShape.posX, currentShape.posY);
         }
     }
 
@@ -80,6 +89,9 @@ public class Tetris extends PApplet {
             strokeWeight(2);
             line(0, bs * i, bs * 16 , bs * i);
         }
+        for (Shape shape : oldShapes) {
+            drawSquare(shape.posX, shape.posY);
+        }
     }
 
     void drawSquare(int x, int y) {
@@ -88,7 +100,5 @@ public class Tetris extends PApplet {
         square(x*bs + bs, y*bs, bs);
         square(x*bs, y*bs + bs, bs);
         square(x*bs + bs, y*bs + bs, bs);
-
     }
-
 }

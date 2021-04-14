@@ -1,0 +1,3 @@
+Make Array of occupied Blocks
+Collision Detection on sideways movement
+Treat collision detection on vertical movement as "bottom"
