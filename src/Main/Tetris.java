@@ -18,7 +18,7 @@ public class Tetris extends PApplet {
     // VARIABLES
     ////////////
 
-    //Colors for: Background, Square
+    //Color for background
     int white = color(255, 255, 255);
     SoundFile music;
     // Block Size
@@ -42,7 +42,7 @@ public class Tetris extends PApplet {
     public void setup() {
         //music = new SoundFile(this, "tetris.wav");
         drawBackground();
-        drawShape(currentShape.posX, currentShape.posY, currentShape.color);
+        drawShape();
         //music.play();
     }
 
@@ -53,7 +53,7 @@ public class Tetris extends PApplet {
             drawBackground();
             currentShape.posY += 1;
             currentShape.refreshBlockedSpaces();
-            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
+            drawShape();
         }
     }
 
@@ -75,7 +75,7 @@ public class Tetris extends PApplet {
             totalBlockedSpaces.addAll(currentShape.blockedSpaces);
             currentShape = spawnNewShape(); //TODO change Square() to Shape
             tetrisCheck();
-            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
+            drawShape();
         }
     }
 
@@ -124,7 +124,7 @@ public class Tetris extends PApplet {
             VerticalCollisionCheck();
             currentShape.posY += 1;
             currentShape.refreshBlockedSpaces();
-            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
+            drawShape();
         }
         // left movement
         boolean otherTetronimoLeft = false;
@@ -142,7 +142,7 @@ public class Tetris extends PApplet {
                 currentShape.posX -= 1;
                 currentShape.refreshBlockedSpaces();
             }
-            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
+            drawShape();
         }
         // right movement
         boolean otherTetronimoRight = false;
@@ -160,7 +160,7 @@ public class Tetris extends PApplet {
                 currentShape.posX += 1;
                 currentShape.refreshBlockedSpaces();
             }
-            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
+            drawShape();
         }
     }
 
@@ -181,11 +181,16 @@ public class Tetris extends PApplet {
         }
     }
 
-    void drawShape(int x, int y, int color) {
-        fill(color);
-        square(x*bs, y*bs, bs);
-        square(x*bs + bs, y*bs, bs);
-        square(x*bs, y*bs + bs, bs);
-        square(x*bs + bs, y*bs + bs, bs);
+    void drawShape() {
+        for (Block block : currentShape.blockedSpaces) {
+            int x = block.x;
+            int y = block.y;
+            fill(currentShape.color(184, 64, 64));
+            square(x*bs, y*bs, bs);
+        }
+
+        //square(x*bs + bs, y*bs, bs);
+        //square(x*bs, y*bs + bs, bs);
+        //square(x*bs + bs, y*bs + bs, bs);
     }
 }

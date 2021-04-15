@@ -7,8 +7,7 @@ import java.util.ArrayList;
 public class Shape extends PApplet {
     int posX;
     int posY;
-    int color;
-
+    int color = color(64, 64, 64);
     Block blockedSpace1;
     Block blockedSpace2;
     Block blockedSpace3;
@@ -21,5 +20,9 @@ public class Shape extends PApplet {
     }
 
     void refreshBlockedSpaces() {
+    }
+
+    int getColor() {
+        return this.color;
     }
 }
