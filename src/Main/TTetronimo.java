@@ -1,14 +1,16 @@
 package Main;
 
+import Main.Block;
+import Main.Shape;
 
-public class Square extends Shape{
+public class TTetronimo extends Shape {
 
-    Square() {
+    TTetronimo() {
         color = color(184, 64, 64);
         blockedSpace1 = new Block(posX, posY, color);
         blockedSpace2 = new Block(posX + 1, posY, color);
+        blockedSpace2 = new Block(posX - 1, posY, color);
         blockedSpace3 = new Block(posX, posY + 1, color);
-        blockedSpace4 = new Block(posX + 1, posY + 1, color);
         blockedSpaces.add(blockedSpace1);
         blockedSpaces.add(blockedSpace2);
         blockedSpaces.add(blockedSpace3);

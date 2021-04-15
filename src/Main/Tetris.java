@@ -20,12 +20,11 @@ public class Tetris extends PApplet {
 
     //Colors for: Background, Square
     int white = color(255, 255, 255);
-    int red = color(184, 64, 64);
     SoundFile music;
     // Block Size
     public static int bs = 60;
     // Current Shape that can be moved
-    Shape currentShape = new Shape();
+    Shape currentShape = spawnNewShape(); // TODO create function to choose Shape at random
     // Array with all Instances of Block Objects that are currently
     // creating an obstacle for the currentShape
     ArrayList<Block> totalBlockedSpaces = new ArrayList<>();
@@ -41,10 +40,10 @@ public class Tetris extends PApplet {
 
     // setup before the game even starts
     public void setup() {
-        music = new SoundFile(this, "tetris.wav");
+        //music = new SoundFile(this, "tetris.wav");
         drawBackground();
-        drawSquare(currentShape.posX, currentShape.posY);
-        music.play();
+        drawShape(currentShape.posX, currentShape.posY, currentShape.color);
+        //music.play();
     }
 
     public void draw() {
@@ -54,8 +53,12 @@ public class Tetris extends PApplet {
             drawBackground();
             currentShape.posY += 1;
             currentShape.refreshBlockedSpaces();
-            drawSquare(currentShape.posX, currentShape.posY);
+            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
         }
+    }
+
+    public Shape spawnNewShape() {
+        return new Square();
     }
 
     public void VerticalCollisionCheck() {
@@ -69,10 +72,10 @@ public class Tetris extends PApplet {
             }
         }
         if (currentShape.posY >= 14 || otherTetronimoBelow) {
-            totalBlockedSpaces.addAll(currentShape.blockedSpaces);// TODO use this line in the tetrisCheck() method
-            currentShape = new Square();
+            totalBlockedSpaces.addAll(currentShape.blockedSpaces);
+            currentShape = spawnNewShape(); //TODO change Square() to Shape
             tetrisCheck();
-            drawSquare(currentShape.posX, currentShape.posY);
+            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
         }
     }
 
@@ -121,7 +124,7 @@ public class Tetris extends PApplet {
             VerticalCollisionCheck();
             currentShape.posY += 1;
             currentShape.refreshBlockedSpaces();
-            drawSquare(currentShape.posX, currentShape.posY);
+            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
         }
         // left movement
         boolean otherTetronimoLeft = false;
@@ -139,7 +142,7 @@ public class Tetris extends PApplet {
                 currentShape.posX -= 1;
                 currentShape.refreshBlockedSpaces();
             }
-            drawSquare(currentShape.posX, currentShape.posY);
+            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
         }
         // right movement
         boolean otherTetronimoRight = false;
@@ -157,7 +160,7 @@ public class Tetris extends PApplet {
                 currentShape.posX += 1;
                 currentShape.refreshBlockedSpaces();
             }
-            drawSquare(currentShape.posX, currentShape.posY);
+            drawShape(currentShape.posX, currentShape.posY, currentShape.color);
         }
     }
 
@@ -178,8 +181,8 @@ public class Tetris extends PApplet {
         }
     }
 
-    void drawSquare(int x, int y) {
-        fill(red);
+    void drawShape(int x, int y, int color) {
+        fill(color);
         square(x*bs, y*bs, bs);
         square(x*bs + bs, y*bs, bs);
         square(x*bs, y*bs + bs, bs);
