@@ -1,8 +1,10 @@
 package Main;
 
 import processing.core.PApplet;
+import processing.sound.*;
 
 import java.util.ArrayList;
+
 
 public class Tetris extends PApplet {
 
@@ -16,15 +18,17 @@ public class Tetris extends PApplet {
     // VARIABLES
     ////////////
 
+    //Colors for: Background, Square
     int white = color(255, 255, 255);
     int red = color(184, 64, 64);
-
+    SoundFile music;
     // Block Size
     public static int bs = 60;
-
+    // Current Shape that can be moved
     Shape currentShape = new Shape();
-    ArrayList<Shape> oldShapes = new ArrayList<>();
-    ArrayList<Block> TotalBlockedSpaces = new ArrayList<>();
+    // Array with all Instances of Block Objects that are currently
+    // creating an obstacle for the currentShape
+    ArrayList<Block> totalBlockedSpaces = new ArrayList<>();
 
     ////////////
     // METHODS
@@ -37,25 +41,27 @@ public class Tetris extends PApplet {
 
     // setup before the game even starts
     public void setup() {
+        music = new SoundFile(this, "tetris.wav");
         drawBackground();
         drawSquare(currentShape.posX, currentShape.posY);
+        music.play();
     }
 
     public void draw() {
         // push block down every second
+        VerticalCollisionCheck();
         if (millis() % 1000 < 15 && currentShape.posY < 30) {
             drawBackground();
             currentShape.posY += 1;
             currentShape.refreshBlockedSpaces();
             drawSquare(currentShape.posX, currentShape.posY);
         }
-        VerticalCollisionCheck();
     }
 
     public void VerticalCollisionCheck() {
         boolean otherTetronimoBelow = false;
         for (Block tetronimo: currentShape.blockedSpaces) {
-            for (Block blocked: TotalBlockedSpaces) {
+            for (Block blocked: totalBlockedSpaces) {
                 if (tetronimo.x == blocked.x && tetronimo.y == blocked.y - 1) {
                     otherTetronimoBelow = true;
                     break;
@@ -63,22 +69,49 @@ public class Tetris extends PApplet {
             }
         }
         if (currentShape.posY >= 14 || otherTetronimoBelow) {
-            TotalBlockedSpaces.addAll(currentShape.blockedSpaces);// TODO use this line in the tetrisCheck() method
-            oldShapes.add(currentShape);
-            currentShape = new Shape();
+            totalBlockedSpaces.addAll(currentShape.blockedSpaces);// TODO use this line in the tetrisCheck() method
+            currentShape = new Square();
             tetrisCheck();
             drawSquare(currentShape.posX, currentShape.posY);
         }
     }
 
-
     private void tetrisCheck() {
-        int tetrisCount= 0;
         // TODO check if at ANY line (Y-Axis from bottom to top) there is a Tetris.
-        //  If yes, then remove that line and continue the check.
-        //  after all Tetris checks, make the blocks fall down by the number of
-        //  Tetrisses made (reduce Y number of old block in "oldShapes"
-        boolean isTetris = false;
+        //  If yes, then remove that line and make all blocks above drop down by one.
+        System.out.println("new Tetris check");
+        for (int row = 0; row < 17; row++) {
+            boolean isTetris = false;
+            int rowBlockCounter = 0;
+            for (Block block : totalBlockedSpaces) {
+                if (block.y == row) {
+                    rowBlockCounter += 1;
+                }
+            }
+            if (rowBlockCounter > 0) {
+                System.out.println(rowBlockCounter);
+            }
+            ArrayList<Block> blocksToRemove = new ArrayList<>();
+            if (rowBlockCounter == 10) {
+                isTetris = true;
+                for (Block block : totalBlockedSpaces) {
+                    if (block.y == row) {
+                        blocksToRemove.add(block);
+                    }
+                }
+                totalBlockedSpaces.removeAll(blocksToRemove);
+            }
+            if (isTetris) {
+                System.out.println("dropping by one");
+                for (int rowToBeRemoved = row - 1; rowToBeRemoved > 0; rowToBeRemoved--) {
+                    for (Block block : totalBlockedSpaces) {
+                        if (block.y == rowToBeRemoved) {
+                            block.y += 1;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void keyPressed() {
@@ -93,7 +126,7 @@ public class Tetris extends PApplet {
         // left movement
         boolean otherTetronimoLeft = false;
         for (Block tetronimo: currentShape.blockedSpaces) {
-            for (Block blocked: TotalBlockedSpaces) {
+            for (Block blocked: totalBlockedSpaces) {
                 if (tetronimo.x == blocked.x + 1 && tetronimo.y == blocked.y) {
                     otherTetronimoLeft = true;
                     break;
@@ -111,7 +144,7 @@ public class Tetris extends PApplet {
         // right movement
         boolean otherTetronimoRight = false;
         for (Block tetronimo: currentShape.blockedSpaces) {
-            for (Block blocked: TotalBlockedSpaces) {
+            for (Block blocked: totalBlockedSpaces) {
                 if (tetronimo.x == blocked.x - 1 && tetronimo.y == blocked.y) {
                     otherTetronimoRight = true;
                     break;
@@ -140,8 +173,8 @@ public class Tetris extends PApplet {
             strokeWeight(2);
             line(0, bs * i, bs * 16 , bs * i);
         }
-        for (Shape shape : oldShapes) {
-            drawSquare(shape.posX, shape.posY);
+        for (Block block : totalBlockedSpaces) {
+            square(block.x*bs, block.y*bs, bs);
         }
     }
 
