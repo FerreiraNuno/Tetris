@@ -71,18 +71,19 @@ public class Tetris extends PApplet {
                 }
             }
         }
-        if (currentShape.posY >= 14 || otherTetronimoBelow) {
-            totalBlockedSpaces.addAll(currentShape.blockedSpaces);
-            currentShape = spawnNewShape(); //TODO change Square() to Shape
-            tetrisCheck();
-            drawShape();
+        for (Block tetronimo : currentShape.blockedSpaces) {
+            if (tetronimo.y >= 15 || otherTetronimoBelow) {
+                totalBlockedSpaces.addAll(currentShape.blockedSpaces);
+                currentShape = spawnNewShape(); //TODO change Square() to Shape
+                tetrisCheck();
+                drawShape();
+            }
         }
     }
 
     private void tetrisCheck() {
         // TODO check if at ANY line (Y-Axis from bottom to top) there is a Tetris.
         //  If yes, then remove that line and make all blocks above drop down by one.
-        System.out.println("new Tetris check");
         for (int row = 0; row < 17; row++) {
             boolean isTetris = false;
             int rowBlockCounter = 0;
@@ -90,9 +91,6 @@ public class Tetris extends PApplet {
                 if (block.y == row) {
                     rowBlockCounter += 1;
                 }
-            }
-            if (rowBlockCounter > 0) {
-                System.out.println(rowBlockCounter);
             }
             ArrayList<Block> blocksToRemove = new ArrayList<>();
             if (rowBlockCounter == 10) {
@@ -105,7 +103,6 @@ public class Tetris extends PApplet {
                 totalBlockedSpaces.removeAll(blocksToRemove);
             }
             if (isTetris) {
-                System.out.println("dropping by one");
                 for (int rowToBeRemoved = row - 1; rowToBeRemoved > 0; rowToBeRemoved--) {
                     for (Block block : totalBlockedSpaces) {
                         if (block.y == rowToBeRemoved) {
@@ -128,13 +125,13 @@ public class Tetris extends PApplet {
         }
         // left movement
         boolean otherTetronimoLeft = false;
-        for (Block tetronimo: currentShape.blockedSpaces) {
+        for (Block tetronimo : currentShape.blockedSpaces) {
             if (tetronimo.x == 0) {
                 otherTetronimoLeft = true;
             }
             for (Block blocked: totalBlockedSpaces) {
                 if (tetronimo.x == blocked.x + 1 & tetronimo.y == blocked.y) {
-                    System.out.println(otherTetronimoLeft);
+                    otherTetronimoLeft = true;
                     break;
                 }
             }
@@ -147,8 +144,8 @@ public class Tetris extends PApplet {
         }
         // right movement
         boolean otherTetronimoRight = false;
-        for (Block tetronimo: currentShape.blockedSpaces) {
-            if (tetronimo.x == 15) {
+        for (Block tetronimo : currentShape.blockedSpaces) {
+            if (tetronimo.x == 9) {
                 otherTetronimoRight = true;
             }
             for (Block blocked: totalBlockedSpaces) {
@@ -158,12 +155,30 @@ public class Tetris extends PApplet {
                 }
             }
         }
-        if (key == 'd' &&! otherTetronimoRight) {
+        if (key == 'd' & !otherTetronimoRight) {
             drawBackground();
-            if (currentShape.posX < 8) {
-                currentShape.posX += 1;
-                currentShape.refreshBlockedSpaces();
+            currentShape.posX += 1;
+            currentShape.refreshBlockedSpaces();
+            drawShape();
+        }
+        // rotation
+        boolean rotationNotPossible = false;
+        /*
+        for (Block tetronimo : currentShape.getNextRotationBlockedSpaces()) {
+            if (tetronimo.x == 10) {
+                rotationNotPossible = true;
             }
+            for (Block blocked: totalBlockedSpaces) {
+                if (tetronimo.x == blocked.x && tetronimo.y == blocked.y) {
+                    rotationNotPossible = true;
+                    break;
+                }
+            }
+        }
+         */
+        if (key == 'p' & !rotationNotPossible) {
+            drawBackground();
+            currentShape.rotate();
             drawShape();
         }
     }

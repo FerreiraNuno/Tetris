@@ -15,10 +15,6 @@ public class Shape extends PApplet {
     int posX;
     int posY;
     int color = color(64, 64, 64);
-    Block blockedSpace1;
-    Block blockedSpace2;
-    Block blockedSpace3;
-    Block blockedSpace4;
     ArrayList<Block> blockedSpaces = new ArrayList<>();
 
     Shape() {

@@ -13,40 +13,24 @@ public class TTetronimo extends Shape {
                                {{0, 0}, {-1, 0}, {+1, 0}, {0, -1}},
                                {{0, 0}, {0, +1}, {0, -1}, {+1, 0}},
              };
+    int currentPositionInRotation = 0;
+    int color = color(184, 64, 64);
+
 
     TTetronimo() {
-        int color = color(184, 64, 64);
-        /*
-        for (int[] block : rotationArray[0]) {
-            blockedSpace1 = new Block(posX, posY, color);
-            blockedSpace2 = new Block(posX + 1, posY, color);
-            blockedSpace3 = new Block(posX - 1, posY, color);
-            blockedSpace4 = new Block(posX, posY + 1, color);
-            blockedSpaces.add(blockedSpace1);
-            blockedSpaces.add(blockedSpace2);
-            blockedSpaces.add(blockedSpace3);
-            blockedSpaces.add(blockedSpace4);
+        for (int i = 0; i < rotationArray[currentPositionInRotation % 4].length; i++) {
+            int x = rotationArray[currentPositionInRotation % 4][i][0];
+            int y = rotationArray[currentPositionInRotation % 4][i][1];
+            blockedSpaces.add(new Block(posX + x, posY + y, color));
         }
-
-         */
-
-
-        blockedSpace1 = new Block(posX, posY, color);
-        blockedSpace2 = new Block(posX + 1, posY, color);
-        blockedSpace3 = new Block(posX - 1, posY, color);
-        blockedSpace4 = new Block(posX, posY + 1, color);
-        blockedSpaces.add(blockedSpace1);
-        blockedSpaces.add(blockedSpace2);
-        blockedSpaces.add(blockedSpace3);
-        blockedSpaces.add(blockedSpace4);
-
     }
 
     void refreshBlockedSpaces() {
-        blockedSpace1.refreshBlock(posX, posY);
-        blockedSpace2.refreshBlock(posX + 1, posY);
-        blockedSpace3.refreshBlock(posX - 1, posY);
-        blockedSpace4.refreshBlock(posX, posY + 1);
+        for (int i = 0; i < rotationArray[currentPositionInRotation % 4].length ;i++) {
+            int x = rotationArray[currentPositionInRotation % 4][i][0];
+            int y = rotationArray[currentPositionInRotation % 4][i][1];
+            blockedSpaces.get(i).refreshBlock(posX + x, posY + y);
+        }
     }
 
     int getColor() {
@@ -54,14 +38,25 @@ public class TTetronimo extends Shape {
         return color(64, 186, 64);
     }
 
-    void rotate() {
-    }
-
     ArrayList<Block> getNextRotationBlockedSpaces() {
         ArrayList<Block> nextBlockedSpaces = new ArrayList<>();
-
+        for (int i = 0; i < rotationArray[currentPositionInRotation % 4].length; i++) {
+            int x = rotationArray[currentPositionInRotation % 4][i][0];
+            int y = rotationArray[currentPositionInRotation % 4][i][1];
+            nextBlockedSpaces.add(new Block(posX + x, posY + y, color));
+        }
         // TODO change this one
-        return blockedSpaces;
+        return nextBlockedSpaces;
+    }
+
+    void rotate() {
+        currentPositionInRotation += 1;
+        for (int i = 0; i < rotationArray[currentPositionInRotation % 4].length ;i++) {
+            int x = rotationArray[currentPositionInRotation % 4][i][0];
+            int y = rotationArray[currentPositionInRotation % 4][i][1];
+            blockedSpaces.get(i).refreshBlock(posX + x, posY + y);
+            refreshBlockedSpaces();
+        }
     }
 
 }
