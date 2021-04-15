@@ -123,63 +123,75 @@ public class Tetris extends PApplet {
             currentShape.refreshBlockedSpaces();
             drawShape();
         }
+
         // left movement
-        boolean otherTetronimoLeft = false;
-        for (Block tetronimo : currentShape.blockedSpaces) {
-            if (tetronimo.x == 0) {
-                otherTetronimoLeft = true;
-            }
-            for (Block blocked: totalBlockedSpaces) {
-                if (tetronimo.x == blocked.x + 1 & tetronimo.y == blocked.y) {
+        if (key == 'a') {
+            boolean otherTetronimoLeft = false;
+            for (Block tetronimo : currentShape.blockedSpaces) {
+                if (tetronimo.x == 0) {
                     otherTetronimoLeft = true;
-                    break;
+                }
+                for (Block blocked: totalBlockedSpaces) {
+                    if (tetronimo.x == blocked.x + 1 & tetronimo.y == blocked.y) {
+                        otherTetronimoLeft = true;
+                        break;
+                    }
                 }
             }
+            if (!otherTetronimoLeft) {
+                drawBackground();
+                currentShape.posX -= 1;
+                currentShape.refreshBlockedSpaces();
+                drawShape();
+            }
         }
-        if (key == 'a' & !otherTetronimoLeft) {
-            drawBackground();
-            currentShape.posX -= 1;
-            currentShape.refreshBlockedSpaces();
-            drawShape();
-        }
+
         // right movement
-        boolean otherTetronimoRight = false;
-        for (Block tetronimo : currentShape.blockedSpaces) {
-            if (tetronimo.x == 9) {
-                otherTetronimoRight = true;
-            }
-            for (Block blocked: totalBlockedSpaces) {
-                if (tetronimo.x == blocked.x - 1 && tetronimo.y == blocked.y) {
+        if (key == 'd') {
+            boolean otherTetronimoRight = false;
+            for (Block tetronimo : currentShape.blockedSpaces) {
+                if (tetronimo.x == 9) {
                     otherTetronimoRight = true;
-                    break;
+                }
+                for (Block blocked: totalBlockedSpaces) {
+                    if (tetronimo.x == blocked.x - 1 && tetronimo.y == blocked.y) {
+                        otherTetronimoRight = true;
+                        break;
+                    }
                 }
             }
+            if (!otherTetronimoRight) {
+                drawBackground();
+                currentShape.posX += 1;
+                currentShape.refreshBlockedSpaces();
+                drawShape();
+            }
         }
-        if (key == 'd' & !otherTetronimoRight) {
-            drawBackground();
-            currentShape.posX += 1;
-            currentShape.refreshBlockedSpaces();
-            drawShape();
-        }
+
         // rotation
-        boolean rotationNotPossible = false;
-        /*
-        for (Block tetronimo : currentShape.getNextRotationBlockedSpaces()) {
-            if (tetronimo.x == 10) {
-                rotationNotPossible = true;
-            }
-            for (Block blocked: totalBlockedSpaces) {
-                if (tetronimo.x == blocked.x && tetronimo.y == blocked.y) {
+        if (key == 'p') {
+            boolean rotationNotPossible = false;
+            System.out.println("Trying rotation");
+            System.out.println(currentShape.getNextRotationBlockedSpaces().get(0).x);
+            System.out.println(currentShape.getNextRotationBlockedSpaces().get(1).x);
+            System.out.println(currentShape.getNextRotationBlockedSpaces().get(2).x);
+            System.out.println(currentShape.getNextRotationBlockedSpaces().get(3).x);
+            for (Block nextTetronimo : currentShape.getNextRotationBlockedSpaces()) {
+                if (nextTetronimo.x > 9 || nextTetronimo.x < 0) {
                     rotationNotPossible = true;
-                    break;
+                }
+                for (Block blocked: totalBlockedSpaces) {
+                    if (nextTetronimo.x == blocked.x && nextTetronimo.y == blocked.y) {
+                        rotationNotPossible = true;
+                        break;
+                    }
                 }
             }
-        }
-         */
-        if (key == 'p' & !rotationNotPossible) {
-            drawBackground();
-            currentShape.rotate();
-            drawShape();
+            if (!rotationNotPossible) {
+                drawBackground();
+                currentShape.rotate();
+                drawShape();
+            }
         }
     }
 

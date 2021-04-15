@@ -41,8 +41,8 @@ public class TTetronimo extends Shape {
     ArrayList<Block> getNextRotationBlockedSpaces() {
         ArrayList<Block> nextBlockedSpaces = new ArrayList<>();
         for (int i = 0; i < rotationArray[currentPositionInRotation % 4].length; i++) {
-            int x = rotationArray[currentPositionInRotation % 4][i][0];
-            int y = rotationArray[currentPositionInRotation % 4][i][1];
+            int x = rotationArray[(currentPositionInRotation + 1) % 4][i][0];
+            int y = rotationArray[(currentPositionInRotation + 1) % 4][i][1];
             nextBlockedSpaces.add(new Block(posX + x, posY + y, color));
         }
         // TODO change this one
