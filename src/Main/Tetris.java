@@ -24,7 +24,7 @@ public class Tetris extends PApplet {
     // Block Size
     public static int bs = 60;
     // Current Shape that can be moved
-    Shape currentShape = spawnNewShape(); // TODO create function to choose Shape at random
+    Shape currentShape = spawnNewShape();
     // Array with all Instances of Block Objects that are currently
     // creating an obstacle for the currentShape
     ArrayList<Block> totalBlockedSpaces = new ArrayList<>();
@@ -49,7 +49,7 @@ public class Tetris extends PApplet {
     public void draw() {
         // push block down every second
         VerticalCollisionCheck();
-        if (millis() % 1000 < 15 && currentShape.posY < 30) {
+        if (millis() % 800 < 15 && currentShape.posY < 30) {
             drawBackground();
             currentShape.posY += 1;
             currentShape.refreshBlockedSpaces();
@@ -58,6 +58,8 @@ public class Tetris extends PApplet {
     }
 
     public Shape spawnNewShape() {
+        int output = (int) Math.floor(random(1, 2.99F));
+        System.out.println("spawning new Shape");
         return new TTetronimo();
     }
 
@@ -74,16 +76,14 @@ public class Tetris extends PApplet {
         for (Block tetronimo : currentShape.blockedSpaces) {
             if (tetronimo.y >= 15 || otherTetronimoBelow) {
                 totalBlockedSpaces.addAll(currentShape.blockedSpaces);
-                currentShape = spawnNewShape(); //TODO change Square() to Shape
                 tetrisCheck();
                 drawShape();
+                currentShape = spawnNewShape();
             }
         }
     }
 
     private void tetrisCheck() {
-        // TODO check if at ANY line (Y-Axis from bottom to top) there is a Tetris.
-        //  If yes, then remove that line and make all blocks above drop down by one.
         for (int row = 0; row < 17; row++) {
             boolean isTetris = false;
             int rowBlockCounter = 0;
@@ -171,11 +171,6 @@ public class Tetris extends PApplet {
         // rotation
         if (key == 'p') {
             boolean rotationNotPossible = false;
-            System.out.println("Trying rotation");
-            System.out.println(currentShape.getNextRotationBlockedSpaces().get(0).x);
-            System.out.println(currentShape.getNextRotationBlockedSpaces().get(1).x);
-            System.out.println(currentShape.getNextRotationBlockedSpaces().get(2).x);
-            System.out.println(currentShape.getNextRotationBlockedSpaces().get(3).x);
             for (Block nextTetronimo : currentShape.getNextRotationBlockedSpaces()) {
                 if (nextTetronimo.x > 9 || nextTetronimo.x < 0) {
                     rotationNotPossible = true;
