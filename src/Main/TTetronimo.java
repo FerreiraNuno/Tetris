@@ -5,27 +5,32 @@ import java.util.ArrayList;
 
 public class TTetronimo extends Shape {
 
-    // IDENTIFYING BLOCK IS MIDDLE BLOCK
-    /*
-        o   o   o
-        #   #   #
-        o   #   o } (0, 0), (-1, 0), (+1, 0), (0, +1)
-
-        o   #   o
-        #   #   o
-        o   #   o } (0, 0), (0, -1), (-1, 0), (0, +1)
-
-        o   #   o
-        #   #   #
-        o   o   o } (0, 0), (-1, 0), (+1, 0), (0, -1)
-
-        o   #   o
-        o   #   #
-        o   #   o } (0, 0), (0, +1), (0, -1), (+1, 0)
-     */
+    // first loop: rotational position
+    // second loop: block
+    // third loop: x and y axis
+    int[][][] rotationArray = {{{0, 0}, {-1, 0}, {+1, 0}, {0, +1}},
+                               {{0, 0}, {0, -1}, {-1, 0}, {0, +1}},
+                               {{0, 0}, {-1, 0}, {+1, 0}, {0, -1}},
+                               {{0, 0}, {0, +1}, {0, -1}, {+1, 0}},
+             };
 
     TTetronimo() {
         int color = color(184, 64, 64);
+        /*
+        for (int[] block : rotationArray[0]) {
+            blockedSpace1 = new Block(posX, posY, color);
+            blockedSpace2 = new Block(posX + 1, posY, color);
+            blockedSpace3 = new Block(posX - 1, posY, color);
+            blockedSpace4 = new Block(posX, posY + 1, color);
+            blockedSpaces.add(blockedSpace1);
+            blockedSpaces.add(blockedSpace2);
+            blockedSpaces.add(blockedSpace3);
+            blockedSpaces.add(blockedSpace4);
+        }
+
+         */
+
+
         blockedSpace1 = new Block(posX, posY, color);
         blockedSpace2 = new Block(posX + 1, posY, color);
         blockedSpace3 = new Block(posX - 1, posY, color);
@@ -34,6 +39,7 @@ public class TTetronimo extends Shape {
         blockedSpaces.add(blockedSpace2);
         blockedSpaces.add(blockedSpace3);
         blockedSpaces.add(blockedSpace4);
+
     }
 
     void refreshBlockedSpaces() {
