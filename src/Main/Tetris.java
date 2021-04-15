@@ -58,7 +58,7 @@ public class Tetris extends PApplet {
     }
 
     public Shape spawnNewShape() {
-        return new Square();
+        return new TTetronimo();
     }
 
     public void VerticalCollisionCheck() {
@@ -129,24 +129,28 @@ public class Tetris extends PApplet {
         // left movement
         boolean otherTetronimoLeft = false;
         for (Block tetronimo: currentShape.blockedSpaces) {
+            if (tetronimo.x == 0) {
+                otherTetronimoLeft = true;
+            }
             for (Block blocked: totalBlockedSpaces) {
-                if (tetronimo.x == blocked.x + 1 && tetronimo.y == blocked.y) {
-                    otherTetronimoLeft = true;
+                if (tetronimo.x == blocked.x + 1 & tetronimo.y == blocked.y) {
+                    System.out.println(otherTetronimoLeft);
                     break;
                 }
             }
         }
-        if (key == 'a' &&! otherTetronimoLeft) {
+        if (key == 'a' & !otherTetronimoLeft) {
             drawBackground();
-            if (currentShape.posX > 0) {
-                currentShape.posX -= 1;
-                currentShape.refreshBlockedSpaces();
-            }
+            currentShape.posX -= 1;
+            currentShape.refreshBlockedSpaces();
             drawShape();
         }
         // right movement
         boolean otherTetronimoRight = false;
         for (Block tetronimo: currentShape.blockedSpaces) {
+            if (tetronimo.x == 15) {
+                otherTetronimoRight = true;
+            }
             for (Block blocked: totalBlockedSpaces) {
                 if (tetronimo.x == blocked.x - 1 && tetronimo.y == blocked.y) {
                     otherTetronimoRight = true;
@@ -185,7 +189,7 @@ public class Tetris extends PApplet {
         for (Block block : currentShape.blockedSpaces) {
             int x = block.x;
             int y = block.y;
-            fill(currentShape.color(184, 64, 64));
+            fill(currentShape.getColor());
             square(x*bs, y*bs, bs);
         }
 

@@ -4,6 +4,8 @@ package Main;
 public class TTetronimo extends Shape {
 
 
+    // IDENTIFYING BLOCK IS MIDDLE BLOCK
+
     TTetronimo() {
         int color = color(184, 64, 64);
         blockedSpace1 = new Block(posX, posY, color);
@@ -25,6 +27,6 @@ public class TTetronimo extends Shape {
 
     int getColor() {
         // GREEN
-        return color(184, 64, 64);
+        return color(64, 186, 64);
     }
 }

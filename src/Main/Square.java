@@ -3,6 +3,7 @@ package Main;
 
 public class Square extends Shape{
 
+    // IDENTIFYING BLOCK IS TOP LEFT BLOCK
 
     Square() {
         blockedSpace1 = new Block(posX, posY, color);
