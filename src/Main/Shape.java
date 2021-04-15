@@ -33,4 +33,12 @@ public class Shape extends PApplet {
         return this.color;
     }
 
+    ArrayList<Block> getNextRotationBlockedSpaces() {
+        return blockedSpaces;
+    }
+
+
+    void rotate() {
+    }
+
 }

@@ -1,10 +1,28 @@
 package Main;
 
 
+import java.util.ArrayList;
+
 public class TTetronimo extends Shape {
 
-
     // IDENTIFYING BLOCK IS MIDDLE BLOCK
+    /*
+        o   o   o
+        #   #   #
+        o   #   o } (0, 0), (-1, 0), (+1, 0), (0, +1)
+
+        o   #   o
+        #   #   o
+        o   #   o } (0, 0), (0, -1), (-1, 0), (0, +1)
+
+        o   #   o
+        #   #   #
+        o   o   o } (0, 0), (-1, 0), (+1, 0), (0, -1)
+
+        o   #   o
+        o   #   #
+        o   #   o } (0, 0), (0, +1), (0, -1), (+1, 0)
+     */
 
     TTetronimo() {
         int color = color(184, 64, 64);
@@ -29,4 +47,15 @@ public class TTetronimo extends Shape {
         // GREEN
         return color(64, 186, 64);
     }
+
+    void rotate() {
+    }
+
+    ArrayList<Block> getNextRotationBlockedSpaces() {
+        ArrayList<Block> nextBlockedSpaces = new ArrayList<>();
+
+        // TODO change this one
+        return blockedSpaces;
+    }
+
 }
