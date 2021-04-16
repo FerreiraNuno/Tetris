@@ -5,7 +5,6 @@ import processing.core.PApplet;
 import java.util.ArrayList;
 
 /*
-    int blue = color(64, 64, 186);
     int yellow = color(184, 184, 64);
     int cyan = color(64, 184, 184);
     int lila = color(184, 64, 184);

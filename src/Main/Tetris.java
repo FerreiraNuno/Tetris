@@ -1,7 +1,7 @@
 package Main;
 
 import processing.core.PApplet;
-import processing.sound.*;
+import processing.sound.SoundFile;
 
 import java.util.ArrayList;
 
@@ -21,8 +21,7 @@ public class Tetris extends PApplet {
     //Color for background
     int white = color(255, 255, 255);
     SoundFile music;
-    // Block Size
-    public static int bs = 60;
+
     // Current Shape that can be moved
     Shape currentShape = spawnNewShape();
     // Array with all Instances of Block Objects that are currently
@@ -32,10 +31,12 @@ public class Tetris extends PApplet {
     ////////////
     // METHODS
     ////////////
-
+    public static int blockSize = 50;
+    // height
+    public static int height = 20;
     // Screen Size according to Block Size
     public void settings() {
-        size(10 * bs, 16 * bs);
+        size(10 * blockSize, height * blockSize);
     }
 
     // setup before the game even starts
@@ -43,13 +44,13 @@ public class Tetris extends PApplet {
         //music = new SoundFile(this, "tetris.wav");
         drawBackground();
         drawShape();
-        //music.play();
+        //music.loop();
     }
 
     public void draw() {
         // push block down every second
-        VerticalCollisionCheck();
         if (millis() % 800 < 15 && currentShape.posY < 30) {
+            VerticalCollisionCheck();
             drawBackground();
             currentShape.posY += 1;
             currentShape.refreshBlockedSpaces();
@@ -58,9 +59,17 @@ public class Tetris extends PApplet {
     }
 
     public Shape spawnNewShape() {
-        int output = (int) Math.floor(random(1, 2.99F));
-        System.out.println("spawning new Shape");
-        return new TTetronimo();
+        int output = (int) Math.floor(random(1, 4.99F));
+        if (output == 1) {
+            return new SquareTetronimo();
+        } else if (output == 2) {
+            return new zTetronimo();
+        } else if (output == 3) {
+            return new sTetronimo();
+        }
+        else {
+            return new tTetronimo();
+        }
     }
 
     public void VerticalCollisionCheck() {
@@ -74,17 +83,19 @@ public class Tetris extends PApplet {
             }
         }
         for (Block tetronimo : currentShape.blockedSpaces) {
-            if (tetronimo.y >= 15 || otherTetronimoBelow) {
+            //
+            if (tetronimo.y >= height - 1 || otherTetronimoBelow && tetronimo.y > 1) {
                 totalBlockedSpaces.addAll(currentShape.blockedSpaces);
                 tetrisCheck();
                 drawShape();
                 currentShape = spawnNewShape();
+                break;
             }
         }
     }
 
     private void tetrisCheck() {
-        for (int row = 0; row < 17; row++) {
+        for (int row = 0; row < height + 1; row++) {
             boolean isTetris = false;
             int rowBlockCounter = 0;
             for (Block block : totalBlockedSpaces) {
@@ -173,11 +184,13 @@ public class Tetris extends PApplet {
             boolean rotationNotPossible = false;
             for (Block nextTetronimo : currentShape.getNextRotationBlockedSpaces()) {
                 if (nextTetronimo.x > 9 || nextTetronimo.x < 0) {
+                    System.out.println("rotation not possible");
                     rotationNotPossible = true;
                 }
                 for (Block blocked: totalBlockedSpaces) {
                     if (nextTetronimo.x == blocked.x && nextTetronimo.y == blocked.y) {
                         rotationNotPossible = true;
+                        System.out.println("rotation not possible");
                         break;
                     }
                 }
@@ -195,15 +208,17 @@ public class Tetris extends PApplet {
         // creates horizontal lines for visual orientation
         for (int i = 0; i < 10; i++) {
             strokeWeight(2);
-            line(bs * i, 0, bs * i, bs * 16);
+            line(blockSize * i, 0, blockSize * i, blockSize * height);
         }
         // creates vertical lines for visual orientation
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < height; i++) {
             strokeWeight(2);
-            line(0, bs * i, bs * 16 , bs * i);
+            line(0, blockSize * i, blockSize * height , blockSize * i);
         }
+        // draws placed Blocks
         for (Block block : totalBlockedSpaces) {
-            square(block.x*bs, block.y*bs, bs);
+            fill(block.color);
+            square(block.x*blockSize, block.y*blockSize, blockSize);
         }
     }
 
@@ -211,8 +226,8 @@ public class Tetris extends PApplet {
         for (Block block : currentShape.blockedSpaces) {
             int x = block.x;
             int y = block.y;
-            fill(currentShape.getColor());
-            square(x*bs, y*bs, bs);
+            fill(block.color);
+            square(x*blockSize, y*blockSize, blockSize);
         }
 
         //square(x*bs + bs, y*bs, bs);

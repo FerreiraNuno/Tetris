@@ -3,7 +3,7 @@ package Main;
 
 import java.util.ArrayList;
 
-public class TTetronimo extends Shape {
+public class tTetronimo extends Shape {
 
     // first loop: rotational position
     // second loop: block
@@ -14,14 +14,14 @@ public class TTetronimo extends Shape {
                                {{0, 0}, {0, +1}, {0, -1}, {+1, 0}},
              };
     int currentPositionInRotation = 0;
-    int color = color(184, 64, 64);
+    int green = color(64, 186, 64);
 
 
-    TTetronimo() {
+    tTetronimo() {
         for (int i = 0; i < rotationArray[currentPositionInRotation % 4].length; i++) {
             int x = rotationArray[currentPositionInRotation % 4][i][0];
             int y = rotationArray[currentPositionInRotation % 4][i][1];
-            blockedSpaces.add(new Block(posX + x, posY + y, color));
+            blockedSpaces.add(new Block(posX + x, posY + y, green));
         }
     }
 
@@ -33,17 +33,12 @@ public class TTetronimo extends Shape {
         }
     }
 
-    int getColor() {
-        // GREEN
-        return color(64, 186, 64);
-    }
-
     ArrayList<Block> getNextRotationBlockedSpaces() {
         ArrayList<Block> nextBlockedSpaces = new ArrayList<>();
         for (int i = 0; i < rotationArray[currentPositionInRotation % 4].length; i++) {
             int x = rotationArray[(currentPositionInRotation + 1) % 4][i][0];
             int y = rotationArray[(currentPositionInRotation + 1) % 4][i][1];
-            nextBlockedSpaces.add(new Block(posX + x, posY + y, color));
+            nextBlockedSpaces.add(new Block(posX + x, posY + y, green));
         }
         // TODO change this one
         return nextBlockedSpaces;
