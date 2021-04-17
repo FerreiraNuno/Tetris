@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /*
 
 
-    int lila = color(184, 64, 184);
+
  */
 
 public class Shape extends PApplet {

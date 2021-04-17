@@ -42,15 +42,15 @@ public class Tetris extends PApplet {
 
     // setup before the game even starts
     public void setup() {
-        music = new SoundFile(this, "tetris.wav");
+        //music = new SoundFile(this, "tetris.wav");
         drawBackground();
         drawShape();
-        music.loop();
+        //music.loop();
     }
 
     public void draw() {
         // push block down every second
-        if (millis() % 200 < 15 && currentShape.posY < 30) {
+        if (millis() % 300 < 15 && currentShape.posY < 30) {
             VerticalCollisionCheck();
             drawBackground();
             currentShape.posY += 1;
@@ -60,7 +60,7 @@ public class Tetris extends PApplet {
     }
 
     public Shape spawnNewShape() {
-        int output = new Random().nextInt(5);
+        int output = new Random().nextInt(7);
         if (output == 0) {
             return new SquareTetronimo();
         } else if (output == 1) {
@@ -68,9 +68,13 @@ public class Tetris extends PApplet {
         } else if (output == 2) {
             return new sTetronimo();
         }else if (output == 3) {
-            return new lTetronimo();
+            return new LTetronimo();
         }
-        else {
+        else if (output == 4) {
+            return new LReverseTetronimo();
+        } else if (output == 5) {
+            return new ITetronimo();
+        } else {
             return new tTetronimo();
         }
     }
@@ -232,6 +236,7 @@ public class Tetris extends PApplet {
             fill(block.color);
             square(x*blockSize, y*blockSize, blockSize);
         }
+
 
         //square(x*bs + bs, y*bs, bs);
         //square(x*bs, y*bs + bs, bs);

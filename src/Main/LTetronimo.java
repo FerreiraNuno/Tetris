@@ -3,7 +3,7 @@ package Main;
 
 import java.util.ArrayList;
 
-public class lTetronimo extends Shape {
+public class LTetronimo extends Shape {
 
     // first loop: rotational position
     // second loop: block
@@ -17,7 +17,7 @@ public class lTetronimo extends Shape {
     int cyan = color(64, 184, 184);
 
 
-    lTetronimo() {
+    LTetronimo() {
         for (int i = 0; i < rotationArray[currentPositionInRotation % 4].length; i++) {
             int x = rotationArray[currentPositionInRotation % 4][i][0];
             int y = rotationArray[currentPositionInRotation % 4][i][1];
@@ -53,5 +53,4 @@ public class lTetronimo extends Shape {
             refreshBlockedSpaces();
         }
     }
-
 }

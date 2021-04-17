@@ -1,31 +1,25 @@
-
-
-
 package Main;
 
 
-import Main.Block;
-import Main.Shape;
-
 import java.util.ArrayList;
 
-public class sTetronimo extends Shape {
+public class ITetronimo extends Shape {
+
     // first loop: rotational position
     // second loop: block
     // third loop: x and y axis
-    int[][][] rotationArray = {{{0, 0}, {-1, 0}, {0, -1}, {+1, -1}},
-            {{0, 0}, {+1, 0}, {+1, +1}, {0, -1}}
-
+    int[][][] rotationArray = {{{0, 0}, {0, -1}, {0, -2}, {0, +1}},
+            {{-2, 0}, {-1, 0}, {0, 0}, {+1, 0}}
     };
     int currentPositionInRotation = 0;
-    int yellow = color(210, 210, 64);
+    int orange = color(250, 140, 0);
 
 
-    sTetronimo() {
+    ITetronimo() {
         for (int i = 0; i < rotationArray[currentPositionInRotation % 2].length; i++) {
             int x = rotationArray[currentPositionInRotation % 2][i][0];
             int y = rotationArray[currentPositionInRotation % 2][i][1];
-            blockedSpaces.add(new Block(posX + x, posY + y, yellow));
+            blockedSpaces.add(new Block(posX + x, posY + y, orange));
         }
     }
 
@@ -42,7 +36,7 @@ public class sTetronimo extends Shape {
         for (int i = 0; i < rotationArray[currentPositionInRotation % 2].length; i++) {
             int x = rotationArray[(currentPositionInRotation + 1) % 2][i][0];
             int y = rotationArray[(currentPositionInRotation + 1) % 2][i][1];
-            nextBlockedSpaces.add(new Block(posX + x, posY + y, yellow));
+            nextBlockedSpaces.add(new Block(posX + x, posY + y, orange));
         }
         return nextBlockedSpaces;
     }
