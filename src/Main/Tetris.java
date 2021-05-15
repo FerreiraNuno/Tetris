@@ -110,21 +110,18 @@ public class Tetris extends PApplet {
             currentShape.drop();
             drawShape();
         }
-
         // left movement
         if (key == 'a') {
             currentShape.moveLeft();
             drawBackground();
             drawShape();
         }
-
         // right movement
         if (key == 'd') {
             currentShape.moveRight();
             drawBackground();
             drawShape();
         }
-
         // rotation
         if (key == 'p') {
             currentShape.rotate();

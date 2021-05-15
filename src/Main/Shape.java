@@ -96,7 +96,6 @@ public class Shape extends PApplet {
             int y = rotationArray[(currentPositionInRotation + 1) % 4][i][1];
             nextBlockedSpaces.add(new Block(posX + x, posY + y, color));
         }
-        // TODO change this one
         return nextBlockedSpaces;
     }
 
