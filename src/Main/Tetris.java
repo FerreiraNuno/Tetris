@@ -18,39 +18,30 @@ public class Tetris extends PApplet {
     ////////////
     // VARIABLES
     ////////////
-
-    //Color for background
-    int white = color(255, 255, 255);
     SoundFile music;
-
-    // Current Shape that can be moved
     Shape currentShape = spawnNewShape();
-    // Array with all Instances of Block Objects that are currently
-    // creating an obstacle for the currentShape
-    ArrayList<Block> totalBlockedSpaces = new ArrayList<>();
+    ArrayList<Block> totalBlockedSpaces = new ArrayList<>(); // Array with all Instances of Block Objects that are currently an obstacle
 
     ////////////
     // METHODS
     ////////////
     public static int blockSize = 50;
-    // height
     public static int height = 20;
-    // Screen Size according to Block Size
     public void settings() {
         size(10 * blockSize, height * blockSize);
     }
 
     // setup before the game even starts
     public void setup() {
-        //music = new SoundFile(this, "tetris.wav");
+        music = new SoundFile(this, "tetris.wav");
         drawBackground();
         drawShape();
-        //music.loop();
+        music.loop();
     }
 
     public void draw() {
         // push block down every second
-        if (millis() % 300 < 15 && currentShape.posY < 30) {
+        if (millis() % 100 < 15 && currentShape.posY < 30) {
             VerticalCollisionCheck();
             drawBackground();
             currentShape.posY += 1;
@@ -211,7 +202,7 @@ public class Tetris extends PApplet {
     }
 
     void drawBackground() {
-        background(white);
+        background(color(255, 255, 255));
         // creates horizontal lines for visual orientation
         for (int i = 0; i < 10; i++) {
             strokeWeight(2);
