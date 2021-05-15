@@ -4,7 +4,6 @@ import processing.core.PApplet;
 import processing.sound.SoundFile;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class Tetris extends PApplet {
@@ -19,7 +18,7 @@ public class Tetris extends PApplet {
     // VARIABLES
     ////////////
     SoundFile music;
-    Shape currentShape = spawnNewShape();
+    Shape currentShape = new Shape(this);
     ArrayList<Block> totalBlockedSpaces = new ArrayList<>(); // Array with all Instances of Block Objects that are currently an obstacle
 
     ////////////
@@ -41,34 +40,14 @@ public class Tetris extends PApplet {
 
     public void draw() {
         // push block down every second
-        if (millis() % 100 < 15 && currentShape.posY < 30) {
+        if (frameCount % 10 == 0) {
             VerticalCollisionCheck();
             drawBackground();
-            currentShape.posY += 1;
-            currentShape.refreshBlockedSpaces();
+            currentShape.drop();
             drawShape();
         }
     }
 
-    public Shape spawnNewShape() {
-        int output = new Random().nextInt(7);
-        if (output == 0) {
-            return new SquareTetronimo();
-        } else if (output == 1) {
-            return new zTetronimo();
-        } else if (output == 2) {
-            return new sTetronimo();
-        }else if (output == 3) {
-            return new LTetronimo();
-        }
-        else if (output == 4) {
-            return new LReverseTetronimo();
-        } else if (output == 5) {
-            return new ITetronimo();
-        } else {
-            return new tTetronimo();
-        }
-    }
 
     public void VerticalCollisionCheck() {
         boolean otherTetronimoBelow = false;
@@ -86,7 +65,7 @@ public class Tetris extends PApplet {
                 totalBlockedSpaces.addAll(currentShape.blockedSpaces);
                 tetrisCheck();
                 drawShape();
-                currentShape = spawnNewShape();
+                currentShape = new Shape(this);
                 break;
             }
         }
@@ -128,76 +107,29 @@ public class Tetris extends PApplet {
         if (key == 's') {
             drawBackground();
             VerticalCollisionCheck();
-            currentShape.posY += 1;
-            currentShape.refreshBlockedSpaces();
+            currentShape.drop();
             drawShape();
         }
 
         // left movement
         if (key == 'a') {
-            boolean otherTetronimoLeft = false;
-            for (Block tetronimo : currentShape.blockedSpaces) {
-                if (tetronimo.x == 0) {
-                    otherTetronimoLeft = true;
-                }
-                for (Block blocked: totalBlockedSpaces) {
-                    if (tetronimo.x == blocked.x + 1 & tetronimo.y == blocked.y) {
-                        otherTetronimoLeft = true;
-                        break;
-                    }
-                }
-            }
-            if (!otherTetronimoLeft) {
-                drawBackground();
-                currentShape.posX -= 1;
-                currentShape.refreshBlockedSpaces();
-                drawShape();
-            }
+            currentShape.moveLeft();
+            drawBackground();
+            drawShape();
         }
 
         // right movement
         if (key == 'd') {
-            boolean otherTetronimoRight = false;
-            for (Block tetronimo : currentShape.blockedSpaces) {
-                if (tetronimo.x == 9) {
-                    otherTetronimoRight = true;
-                }
-                for (Block blocked: totalBlockedSpaces) {
-                    if (tetronimo.x == blocked.x - 1 && tetronimo.y == blocked.y) {
-                        otherTetronimoRight = true;
-                        break;
-                    }
-                }
-            }
-            if (!otherTetronimoRight) {
-                drawBackground();
-                currentShape.posX += 1;
-                currentShape.refreshBlockedSpaces();
-                drawShape();
-            }
+            currentShape.moveRight();
+            drawBackground();
+            drawShape();
         }
 
         // rotation
         if (key == 'p') {
-            boolean rotationNotPossible = false;
-            for (Block nextTetronimo : currentShape.getNextRotationBlockedSpaces()) {
-                if (nextTetronimo.x > 9 || nextTetronimo.x < 0) {
-                    System.out.println("rotation not possible");
-                    rotationNotPossible = true;
-                }
-                for (Block blocked: totalBlockedSpaces) {
-                    if (nextTetronimo.x == blocked.x && nextTetronimo.y == blocked.y) {
-                        rotationNotPossible = true;
-                        System.out.println("rotation not possible");
-                        break;
-                    }
-                }
-            }
-            if (!rotationNotPossible) {
-                drawBackground();
-                currentShape.rotate();
-                drawShape();
-            }
+            currentShape.rotate();
+            drawBackground();
+            drawShape();
         }
     }
 

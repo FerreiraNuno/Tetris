@@ -7,6 +7,7 @@ public class Block extends PApplet{
     public int y;
     int color;
 
+
     public Block(int x, int y, int color) {
         this.x = x;
         this.y = y;
