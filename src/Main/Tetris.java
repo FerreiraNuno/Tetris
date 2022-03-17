@@ -1,7 +1,6 @@
 package Main;
 
 import processing.core.PApplet;
-import processing.sound.SoundFile;
 
 import java.util.ArrayList;
 
@@ -17,7 +16,6 @@ public class Tetris extends PApplet {
     ////////////
     // VARIABLES
     ////////////
-    SoundFile music;
     Shape currentShape = new Shape(this);
     ArrayList<Block> totalBlockedSpaces = new ArrayList<>(); // Array with all Instances of Block Objects that are currently an obstacle
 
@@ -32,10 +30,8 @@ public class Tetris extends PApplet {
 
     // setup before the game even starts
     public void setup() {
-        music = new SoundFile(this, "tetris.wav");
         drawBackground();
         drawShape();
-        music.loop();
     }
 
     public void draw() {
