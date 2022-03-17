@@ -5,7 +5,7 @@
 To start the Game the core.jar and sound.jar files need to be added as dependencies, either with a build tool like Gradle or in
 IntelliJ´s Project Settings.
 
-###IntelliJ
+### IntelliJ
 
 ![alt text](img/module.png)
 
@@ -17,5 +17,7 @@ Use A, S, D for movement controls and P for Rotation.
 
 ## Gameplay
 
-![alt text](img/gameplay.png)
+
+<img src="./img/gameplay.png" alt="gameplay" width="400"/>
+
 
